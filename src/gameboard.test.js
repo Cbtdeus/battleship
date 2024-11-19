@@ -1,5 +1,4 @@
 const Gameboard = require("./gameboard");
-
 test("Sucessfully place a ship", () => {
   const testBoard = new Gameboard();
   testBoard.placeShip([1, 1], [1, 4]);
@@ -52,10 +51,26 @@ test("Sucsessfully receive and record an attack", () => {
 
 test("Stale attacks are not processed", () => {
   const testBoard = new Gameboard();
+  testBoard.placeShip([1, 5], [1, 5]);
+  testBoard.receiveAttack(1, 5);
   testBoard.receiveAttack(1, 5);
   expect(testBoard.receiveAttack(1, 5)).toBe(false);
+  expect(testBoard.ships[0].getHits()).toBe(1);
 });
 
-/* hitting the same place shouldnt be legal */
-
-/* hitting the same place shouldnt update the hit counter */
+test("Correctly report that all ships have sunk", () => {
+  const testBoard = new Gameboard();
+  testBoard.placeShip([5, 5], [5, 8]);
+  testBoard.placeShip([1, 1], [1, 3]);
+  expect(testBoard.areAllSunk()).toBe(false);
+  testBoard.receiveAttack(5, 5);
+  testBoard.receiveAttack(5, 6);
+  testBoard.receiveAttack(5, 7);
+  testBoard.receiveAttack(5, 8);
+  expect(testBoard.areAllSunk()).toBe(false);
+  testBoard.receiveAttack(1, 1);
+  expect(testBoard.areAllSunk()).toBe(false);
+  testBoard.receiveAttack(1, 2);
+  testBoard.receiveAttack(1, 3);
+  expect(testBoard.areAllSunk()).toBe(true);
+});

@@ -1,10 +1,8 @@
 const Ship = require("./ship");
 
 class Gameboard {
-  constructor(side, isHuman = true) {
-    this.side = side;
-    this.isHuman = isHuman;
-    this.attacks = ["asdf"];
+  constructor() {
+    this.attacks = [];
     this.ships = [];
     this.board = this.initializeGameboard();
   }
@@ -71,6 +69,14 @@ class Gameboard {
     }
     return false;
   }
+  areAllSunk() {
+    for (let i = 0; i < this.ships.length; i++) {
+      if (this.ships[i].isSunk() === false) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 function iterateBetween(x, y) {
@@ -82,4 +88,3 @@ function iterateBetween(x, y) {
   return iterated;
 }
 module.exports = Gameboard;
-let board = new Gameboard();
